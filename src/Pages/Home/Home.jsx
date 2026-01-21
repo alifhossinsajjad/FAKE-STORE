@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { fetchProducts } from "../../services/api";
+
 import ProductCard from "../../components/ProductCard";
 import ProductModal from "../../components/ProductModal";
 import { MdOutlineRestartAlt } from "react-icons/md";
+import { fetchProducts } from "../../services/api";
+import Loading from "../../components/Loading/Loading";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -26,9 +28,10 @@ const Home = () => {
           sessionStorage.setItem("fakestore_products", JSON.stringify(data));
           setLoading(false);
         }
-      } catch (err) {
+      } catch (error) {
         setError("Failed to load products. Please try again later.");
         setLoading(false);
+        console.log(error);
       }
     };
 
@@ -46,7 +49,7 @@ const Home = () => {
   };
 
   const onDragOver = (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
   };
 
   const onDrop = (e, targetIndex) => {
@@ -75,11 +78,7 @@ const Home = () => {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <span className="loading loading-dots loading-lg text-primary"></span>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {
@@ -119,7 +118,6 @@ const Home = () => {
 
       <ProductModal product={selectedProduct} onClose={closeModal} />
 
-
       <div className="fixed bottom-4 right-4">
         <button
           className="btn btn-circle btn-neutral opacity-50 hover:opacity-100"
@@ -129,7 +127,7 @@ const Home = () => {
             window.location.reload();
           }}
         >
-          <MdOutlineRestartAlt size={30}/>
+          <MdOutlineRestartAlt size={30} />
         </button>
       </div>
     </div>
